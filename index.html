@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Data</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body class="mx-3 my-1">
+    <!-- <h1>Check the console</h1> -->
+
+    <template id="card-template">
+        <section class="card col-3 m-2" style="width: 18rem">
+            <article class="card-body">
+                <h3 class="card-title"></h3>
+                <hr>
+                <p class="card-text"></p>
+            </article>
+        </section>
+    </template>
+
+    <div id="data-list" class="row justify-content-around"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+    <script>
+        axios
+        .get("https://jsonplaceholder.typicode.com/posts?_limit=10")
+        .then((response) => {
+            console.log(response.data[0])
+            function addCard(title = "Untitled", text = "Missing text.") {
+                response.data.forEach((item) => {
+                    title = item.title
+                    body = item.body
+                    // console.log(item)
+                    const template = document.getElementById("card-template").content.cloneNode(true);
+                    template.querySelector('.card-title').innerText = item.title;
+                    template.querySelector('.card-text').innerText = item.body;
+                    document.querySelector('#data-list').appendChild(template);
+                })
+            }
+
+            function getData() {
+                return new Promise(resolve => {
+                    setTimeout(function() {
+                        resolve()
+                    }, 1000)
+                })
+            }
+
+            getData().then((data) => addCard(data))
+            // getData().then((data) => response.data.forEach(item => addCard(item)))
+        })
+
+        // axios
+        // .post("https://jsonplaceholder.typicode.com/posts", {
+        //     // POSTed data goes in the request body
+        //     title: "The Studio",
+        //     body: "Something funny",
+        //     userId: 1,
+        // })
+        // .then((response) => console.log(response.data));
+    </script>
+  </body>
+</html>
